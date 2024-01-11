@@ -20,3 +20,17 @@ Endpoint: /pokemon/team-builder
 Method: POST
 Description: Build and analyze a Pokemon team based on selected Pokemon.
 ```
+
+# Curl Requests:
+
+### get-data
+```
+
+```
+
+### process-data
+```
+curl -X POST https://reqbin.com/echo/post/json 
+   -H "Content-Type: application/json"
+   -d '{"name": "Bulbasaur", "id": 1}'  
+```

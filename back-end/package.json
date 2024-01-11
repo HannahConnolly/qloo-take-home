@@ -13,6 +13,6 @@
   },
   "scripts": {
     "start": "node server.js",
-    "start-react": "react-scripts start"
+    "start-react": "cd front-end && react-scripts start"
   }
 }
