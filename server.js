@@ -6,6 +6,8 @@ const port = 3001;
 
 app.use(express.json());
 
+DEBUG = true
+
 app.get('/fetch-data/:pokemonID?', async (req, res) => {
   try {
     pokemonID = Number.parseInt(req.params.pokemonID)
@@ -24,6 +26,8 @@ app.get('/fetch-data/:pokemonID?', async (req, res) => {
     const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${pokemonID}`);
     const data = response.data;
 
+    if(DEBUG){ console.log(`${res.status} : /fetch-data recieved a ${req.body.name}`) }
+
     res.json(data);
   } catch (error) {
     console.error('Error fetching data from Pokemon API:', error.message);
@@ -37,9 +41,12 @@ app.post('/process-data', (req, res) => {
     // Process the data received in the request body
     const requestData = req.body;
 
+    let types = req.body.types.map(type => type.type.name)
+
     parsedPokemon = {
       name: req.body.name,
-      id: req.body.id
+      id: req.body.id,
+      types: types
     }
 
     if(pokemonList.length > 5) {
@@ -47,13 +54,16 @@ app.post('/process-data', (req, res) => {
     }
 
     pokemonList.push(parsedPokemon)
-    
-    console.log(pokemonList)
+
+    if(DEBUG){ 
+      console.log(`200 : /process-data recieved a ${req.body.name}`)
+      console.log(pokemonList) 
+    }
 
     res.json({ message: 'Pokemon processed successfully', processedData: requestData });
   } catch (error) {
-    console.error('Error processing data:', error.message);
-    res.status(500).json({ error: 'Internal Server Error' });
+    console.error(`400 : /process-data - Error processing data:', error.message`);
+    res.status(400).json({ error: 'Error processing input Pokemon' });
   }
 });
 
