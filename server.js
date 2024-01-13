@@ -9,6 +9,9 @@ app.use(express.json());
 const DEBUG = true
 const GEN_1_POKEMON = 151
 
+// "database" of current pokemon
+const pokemonTeam = []
+
 app.get('/fetch-data/:pokemonID?', async (req, res) => {
   try {
     let pokemonID = Number.parseInt(req.params.pokemonID)
@@ -16,10 +19,6 @@ app.get('/fetch-data/:pokemonID?', async (req, res) => {
     // handle bad param input
     if(pokemonID === NaN){ 
       throw Error("Pokemon ID provided could not be parsed as a number")
-    }
-    
-    if(!Number.isInteger(pokemonID)){
-      throw Error("PokemonID must be an integer")
     }
 
     // no pokemon ID provided, call random pokemon
@@ -46,34 +45,32 @@ app.post('/process-data', (req, res) => {
     // Process the data received in the request body
     const {id, name, types} = req.body;
 
-    let typeNames = requestData.types.map(type => type.type.name)
+    let typeNames = types.map(type => type.type.name)
 
-    parsedPokemon = {
+    const parsedPokemon = {
       name,
       id,
       types: typeNames
     }
 
-    if(pokemon_team.length > 5) {
-      pokemonList.shift()
+    // a team can only have 6 pokemon - remove oldest
+    if(pokemonTeam.length > 5) {
+      pokemonTeam.shift()
     }
 
-    pokemonList.push(parsedPokemon)
+    pokemonTeam.push(parsedPokemon)
 
     if(DEBUG){ 
-      console.log(`200 : /process-data recieved a ${name}`)
-      console.log(pokemonList) 
+      console.log(`200 : /process-data received a ${name}`)
+      console.log(pokemonTeam) 
     }
 
-    res.json({ message: 'Pokemon processed successfully', team: pokemonList });
+    res.json({ message: 'Pokemon processed successfully', team: pokemonTeam });
   } catch (error) {
-    console.error(`400 : /process-data - Error processing data:', error.message`);
-    res.status(400).json({ error: 'Error processing input Pokemon' });
+    console.error(`500 : /process-data - Error processing data: `, error.message);
+    res.status(500).json({ error: 'Error processing input Pokemon' });
   }
 });
-
-// "database" of current pokemon
-const pokemon_team = []
 
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);

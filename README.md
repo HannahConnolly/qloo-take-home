@@ -31,5 +31,5 @@ With    pokemon ID: `curl localhost:3001/fetch-data/1`
 
 ### process-data (add recieved pokemon to team)
 ```
-curl -X POST https://localhost:3001/process-data -H "Content-Type: application/json" -d '{"name": "Bulbasaur", "id": 1}'  
+curl -X POST http://localhost:3001/process-data -H "Content-Type: application/json" -d '{ "id": 1, "name": "bulbasaur", "types": [ { "slot": 1, "type": { "name": "grass", "url": "https://pokeapi.co/api/v2/type/12/" } }, { "slot": 2, "type": { "name": "poison", "url": "https://pokeapi.co/api/v2/type/4/" } } ] }'
 ```
