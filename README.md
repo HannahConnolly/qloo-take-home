@@ -5,10 +5,9 @@
 uses the pokemon API to get a pokemon by ID or if no ID is supplied it will get a random pokemon
 
 ```
-Endpoint: get-data/:pokemonName
+Endpoint: get-data/:pokemonID
 Method: GET
 Description: Fetch detailed information about a specific Pokemon.
-Example Request: /pokemon/1
 ```
 
 ### Process data (add pokemon to team)
