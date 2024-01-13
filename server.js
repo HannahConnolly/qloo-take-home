@@ -14,7 +14,7 @@ const pokemonTeam = [];
 
 app.get("/fetch-data/:pokemonID?", async (req, res) => {
   try {
-    const pokemonID = Number.parseInt(req.params.pokemonID);
+    let pokemonID = Number.parseInt(req.params.pokemonID);
 
     // handle bad param input
     if (pokemonID === NaN) {
